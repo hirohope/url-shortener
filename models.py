@@ -4,20 +4,22 @@ from random import choice
 import string
 
 class Shortened(Base):
-    __tablename__ = 'shortens'
-    id = Column(Integer, primary_key=True)
-    url = Column(String(256), unique=True)
-    short = Column(String(64), unique=True)
+	__tablename__ = 'shortens'
+	id = Column(Integer, primary_key=True)
+	url = Column(String(256), unique=True)
+	short = Column(String(64), unique=True)
 
-    def __init__(self, url=None):
-        self.url = url
-        self.short = self.getShortURL(url)
+	def __init__(self, url=None):
+		self.url = url
+		self.short = self.getShortURL(url)
+		length = 3
+		while Shortened.query.filter(Shortened.short==self.short).first() != None:
+			self.short = self.getShortURL(url,length)
+			if length < 6:
+				length+=1
 
-    def __repr__(self):
-        return '<Shortened url %r %r>' % (self.url, self.short)
+	def __repr__(self):
+		return 'Shortened url %r %r' % (self.url, self.short)
 
-    def getShortURL(self, url):
-    	length = 3
-    	return ''.join(choice(string.lowercase) for i in range(length))
-
-    
+	def getShortURL(self, url, length = 3):
+		return ''.join(choice(string.lowercase) for i in range(length))

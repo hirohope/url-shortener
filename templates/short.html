@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>wn.lc</title>
+
+		<script type="text/javascript">
+			window.onload = function(){document.getElementById("url").focus();document.getElementById("url").select()};
+		</script>
+
+	</head>
+
+	<body>
+
+	<div>
+		URL shortener
+	</div>
+
+	<div>
+		<form action="short" method="GET">
+			<input id="url" name="url" type="text" value="{{short}}"/>
+		</form>
+	</div>
+
+	<div>
+		Shortened link: wn.lc/{{short}}
+		Original link: {{url}}
+	</div>		
+
+	</body>
+
+</html>
