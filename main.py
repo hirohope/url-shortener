@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, abort, redirect
 from sqlite3 import dbapi2 as sqlite
 from models import Shortened
 from database import db_session
@@ -20,7 +20,18 @@ if app.debug is not True:
 def index():
 	return render_template('index.html')
 
-@app.route('/short', methods=['POST', 'GET'])
+@app.route('/<short>')
+def unfold(short):
+	s = Shortened.query.filter(Shortened.short == short).first()
+	if s == None:
+		abort(404)
+	else:
+		if s.url[:7] != "http://":
+			return redirect("http://"+s.url)
+		else:
+			return redirect(s.url)
+
+@app.route('/_short', methods=['POST', 'GET'])
 def short():
 	error = None
 	url = None
