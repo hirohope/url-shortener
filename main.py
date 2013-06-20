@@ -33,10 +33,7 @@ def unfold(short):
 		time = Log(s)
 		db.session.add(time)
 		db.session.commit()
-		if s.url[:7] != "http://":
-			return redirect("http://"+s.url)
-		else:
-			return redirect(s.url)
+		return redirect(s.url)
 
 @app.route('/_short', methods=['POST', 'GET'])
 def short():
@@ -52,8 +49,7 @@ def short():
 				db.session.add(s)
 				db.session.commit()
 			short = s.short
-			if url[:7] != "http://":
-				url = "http://"+url
+			
 		else:
 			error = "There's no url"
 	return render_template('short.html', error=error, url=url, short=short)
