@@ -1,0 +1,19 @@
+{%extends "layout.html"%}
+{% block body %}
+
+<div class="jumbotron">
+	<p class="lead">
+		Enter a long url below and click Make Shorter! to create an shorter link.
+	</p>
+
+	<form action="_short" method="GET" onsubmit="return urlCheck(this);">
+		<p class="lead">
+			<input id="url" name="url" type="text"/>
+		</p>
+		<p class="lead">
+			<button type="submit" class="btn">Make Shorter!</button>
+		</p>
+	</form>
+
+</div>
+{% endblock %}
