@@ -1,31 +1,32 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<title>wn.lc</title>
+{%extends "layout.html"%}
+{% block body %}
 
-		<script type="text/javascript">
-			window.onload = function(){document.getElementById("url").focus();document.getElementById("url").select()};
-		</script>
+<div class="jumbotron">
+	<p class="lead">
+		Your long url got shortened!
+	</p>
+	<p>
+		Copy the short url to your clipboard using right-click/copy, control+c, or command-c
+	</p>
 
-	</head>
+	<p>&nbsp;</p>
+	<form action="_short" method="GET">
+		<p class="lead">
+			<input id="url" name="url" type="text" value="www.wn.lc/{{short}}"/>
+		</p>
+		<p class="lead">
+			Shortened link: <a href="www.wn.cl/{{short}}">www.wn.cl/{{short}}</a>
+		</p>
+		<p class="lead">
+			Original link: <a href="{{url}}">{{url}}</a>
+		</p>
 
-	<body>
+	</form>
 
-	<div>
-		URL shortener
-	</div>
+</div>
 
-	<div>
-		<form action="_short" method="GET">
-			<input id="url" name="url" type="text" value="wn.lc/{{short}}"/>
-		</form>
-	</div>
+<script type="text/javascript">
+window.onload = function(){document.getElementById("url").focus();document.getElementById("url").select()};
+</script>
 
-	<div>
-		Shortened link: wn.lc/{{short}}
-		Original link: {{url}}
-	</div>		
-
-	</body>
-
-</html>
+{% endblock %}

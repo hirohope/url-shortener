@@ -1,11 +1,12 @@
 import os
 from flask import Flask, request, render_template, abort, redirect
 from sqlite3 import dbapi2 as sqlite
-from models import Shortened
-from database import db_session
+from models import db, Shortened, Log
+
+app = Flask(__name__, static_folder='static', static_url_path='/static')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 
 
-app = Flask(__name__)
 if app.debug is not True:   
 	import logging
 	from logging.handlers import RotatingFileHandler
@@ -15,6 +16,9 @@ if app.debug is not True:
 	file_handler.setFormatter(formatter)
 	app.logger.addHandler(file_handler)	
 
+db.init_app(app)
+db.app = app
+db.create_all()
 
 @app.route('/')
 def index():
@@ -26,6 +30,9 @@ def unfold(short):
 	if s == None:
 		abort(404)
 	else:
+		time = Log(s)
+		db.session.add(time)
+		db.session.commit()
 		if s.url[:7] != "http://":
 			return redirect("http://"+s.url)
 		else:
@@ -42,16 +49,23 @@ def short():
 			s = Shortened.query.filter(Shortened.url == url).first()
 			if s == None:
 				s = Shortened(url)
-				db_session.add(s)
-				db_session.commit()
+				db.session.add(s)
+				db.session.commit()
 			short = s.short
+			if url[:7] != "http://":
+				url = "http://"+url
 		else:
 			error = "There's no url"
 	return render_template('short.html', error=error, url=url, short=short)
 
-@app.route('/links')
+@app.route('/_links')
 def links():
 	shorts = Shortened.query.all()
 	return "<br>".join(map(lambda x: str(x), shorts))
+
+@app.route('/_times')
+def times():
+	logs = Log.query.all()
+	return "<br>".join(map(lambda x: str(x), logs))
 
 

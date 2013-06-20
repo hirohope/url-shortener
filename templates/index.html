@@ -1,22 +1,19 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<title>wn.lc</title>
-	</head>
+{%extends "layout.html"%}
+{% block body %}
 
-	<body>
+<div class="jumbotron">
+	<p class="lead">
+		Enter a long url below and click Make Shorter! to create an shorter link.
+	</p>
 
-	<div>
-		URL shortener
-	</div>
-
-	<div>
-		<form action="_short" method="GET">
+	<form action="_short" method="GET">
+		<p class="lead">
 			<input name="url" type="text"/>
-			<input type="submit"/>
-		</form>
-	</div>
+		</p>
+		<p class="lead">
+			<button type="submit" class="btn">Make Shorter!</button>
+		</p>
+	</form>
 
-	</body>
-
-</html>
+</div>
+{% endblock %}
