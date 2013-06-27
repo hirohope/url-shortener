@@ -29,12 +29,16 @@ def short():
 			url = request.args['url']
 			if 'custom' in request.args and request.args['custom']:
 				short = request.args['custom']
-				s = Shortened.query.filter(Shortened.url == url)
-				if s != None and Shortened.query.filter(Shortened.short == short).first() != None:
-					flash("Custom URL already taken")
-					return redirect("/?url={}&custom={}".format(url,short))
+				s = Shortened.query.filter(Shortened.short == short).first()
+				if s == None:
+					s = Shortened(url, short)
+					db_session.add(s)
+					db_session.commit()
 				else:
-					short = s.short
+					s = Shortened.query.filter(Shortened.url == url).first()
+					if s == None:
+						flash("Custom URL already taken")
+						return redirect("/?url={}&custom={}".format(url,short))
 			else:
 				s = Shortened.query.filter(Shortened.url == url).first()
 				if s == None:
