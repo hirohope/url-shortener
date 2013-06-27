@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Boolean
 from sqlalchemy.orm import relationship, backref
 from myShortener.database import Base
 
@@ -8,22 +8,26 @@ import string, datetime
 class Shortened(Base):
 	__tablename__ = "shortened"
 	id = Column(Integer, primary_key=True)
-	url = Column(String(256), unique=True)
+	url = Column(String(256))
 	short = Column(String(64), unique=True)
+	custom = Column(Boolean, default=False)
 	logs = relationship('Log', backref='shortened', lazy='dynamic')
 
-
-	def __init__(self, url=None):
+	def __init__(self, url=None, short=None):
 		self.url = url
-		self.short = self.getShortURL(url)
-		length = 3
-		while Shortened.query.filter(Shortened.short==self.short).first() != None:
-			self.short = self.getShortURL(url,length)
-			if length < 6:
-				length+=1
+		if short == None:
+			self.short = self.getShortURL(url)
+			length = 3
+			while Shortened.query.filter(Shortened.short==self.short).first() != None:
+				self.short = self.getShortURL(url,length)
+				if length < 6:
+					length+=1
+		else:
+			self.custom = True
+			self.short = short
 
 	def __repr__(self):
-		return 'Shortened url %r %r %r' % (self.id, self.url, self.short)
+		return 'Shortened url %r %r %r %r' % (self.id, self.url, self.short, self.custom)
 
 	def getShortURL(self, url, length = 3):
 		return ''.join(choice(string.lowercase+string.digits) for i in range(length))

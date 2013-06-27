@@ -8,11 +8,33 @@
 
 	<form action="_short" method="GET" onsubmit="return urlCheck(this);">
 		<p class="lead">
-			<input id="url" name="url" type="text"/>
+			<input id="url" name="url" type="text" value="{{url}}"/>
 		</p>
 		<p class="lead">
 			<button type="submit" class="btn">Make Shorter!</button>
 		</p>
+		<p class="lead">
+			&nbsp;
+		</p>
+		<p class="lead">
+			Want a custom url?
+		</p>
+			{% with messages = get_flashed_messages() %}
+				{% if messages %}
+				<p class="lead">
+					<div class="alert alert-error">
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+					{% for message in messages %}
+						<h3>{{ message }}</h3>
+					{% endfor %}
+					</div>
+				</p>
+				{% endif %}
+			{% endwith %}
+		<p class="lead">
+			http://wn.lc/<input name="custom" type="text" value="{{custom}}"/>
+		</p>
+
 	</form>
 
 </div>

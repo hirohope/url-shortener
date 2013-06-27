@@ -6,8 +6,7 @@ from flask import Flask, request, session, g, redirect, url_for, \
 
 @app.route('/')
 def index():
-	from flask import url_for
-	return render_template('index.html')
+	return render_template('index.html', url = request.args.get('url', ''), custom = request.args.get('custom', ''))
 
 @app.route('/<short>')
 def unfold(short):
@@ -28,11 +27,20 @@ def short():
 	if request.method == 'GET':
 		if 'url' in request.args:
 			url = request.args['url']
-			s = Shortened.query.filter(Shortened.url == url).first()
-			if s == None:
-				s = Shortened(url)
-				db_session.add(s)
-				db_session.commit()
+			if 'custom' in request.args and request.args['custom']:
+				short = request.args['custom']
+				s = Shortened.query.filter(Shortened.url == url).filter(Shortened.short == short).first()
+				if s == None:
+					flash("Custom URL already taken")
+					return redirect("/?url={}&custom={}".format(url,short))
+				else:
+					short = s.short
+			else:
+				s = Shortened.query.filter(Shortened.url == url).first()
+				if s == None:
+					s = Shortened(url)
+					db_session.add(s)
+					db_session.commit()
 			short = s.short
 			
 		else:

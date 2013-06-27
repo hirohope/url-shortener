@@ -3,9 +3,9 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 import os
 
-from myShortener.config import *
+from myShortener  import app
 
-uri = os.environ.get('DATABASE_URL',DATABASE)
+uri = os.environ.get('DATABASE_URL',app.config['DATABASE'])
 engine = create_engine(uri, convert_unicode=True)
 db_session = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine))
 
