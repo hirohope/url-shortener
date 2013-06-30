@@ -116,17 +116,22 @@
     <div class="container">
 
       <div class="masthead">
-        <a href="/">
-          <h3 class="muted">wn.lc - URL Shortener</h3>
-        </a>
         <ul class="nav nav-pills pull-right">
           <li class="active">
             <a href="/">Home</a>
           </li>
           <li><a href="/_about">About</a></li>
           <li><a href="/_contact">Contact</a></li>
-          <li><a href="/_sign_in">Sign In With Twitter</a></li>
+          {% if username %}
+            <li><a href="/_setting">{{username}}</a></li>
+            <li><a href="/_logout">Logout</a></li>
+          {% else %}
+            <li><a href="/_sign_in">Sign In With Twitter</a></li>
+          {% endif %}
         </ul>
+        <a href="/">
+          <h3 class="muted">wn.lc - URL Shortener</h3>
+        </a>
       </div>
 
       <!-- Jumbotron -->

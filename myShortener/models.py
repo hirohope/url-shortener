@@ -48,12 +48,47 @@ class User(Base):
 	__tablename__ = "user"
 	id = Column(Integer, primary_key=True)
 	username = Column(String(256), unique=True)
-	date = Column(DateTime, default=datetime.datetime.now)
+	email = Column(String(256), unique=True)
+	oauth_token_secret = Column(String(256))
 
-	def __init__(self, username):
+	date = Column(DateTime, default=datetime.datetime.now)
+	active = Column(Boolean, default=True)
+
+	def __init__(self, user_id, username, email, oauth_token_secret):
+		self.id = user_id
 		self.username = username
+		self.email = email
+		self.oauth_token_secret = oauth_token_secret
 
 	def __repr__(self):
-		return 'Log url %r %r %r' % (self.id, self.date, self.short_id)
+		return 'User %r %r %r %r %r' % (self.id, self.username, self.email, self.date, self.active)
+
+class Profile(Base):
+	__tablename__ = 'profile'
+	id = Column(Integer, primary_key=True)
+	user_id = Column(Integer, ForeignKey('user.id'))
+	oauth_token = Column(String(200)) 
+	oauth_secret = Column(String(200))
+
+	def __init__(self, user_id, oauth_token, oauth_secret):
+		self.user_id = user_id
+		self.oauth_token = oauth_token
+		self.oauth_secret = oauth_secret
+
+	def __repr__(self):
+		return "Profile %r %r %r %r" % (self.id, self.user_id, self.oauth_token, self.oauth_secret)
+
+class MyShortened(Base):
+	__tablename__ = "myShortened"
+	short_id = Column(Integer, ForeignKey('shortened.id'), primary_key=True)
+	user_id = Column(Integer, ForeignKey('user.id'), primary_key=True)
+
+	def __init__(self, short_id, user_id):
+		self.short_id = short_id
+		self.user_id = user_id
+
+	def __repr__(self):
+		return "MyShortened %r %r" % (self.short_id, self.user_id)
+
 
 		
