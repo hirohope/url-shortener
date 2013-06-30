@@ -136,14 +136,14 @@ def callback():
 			db_session.commit()
 
 		session['username'] = user.username
-		session['user_id'] = user.user_id
+		session['user_id'] = user.id
 		return redirect("/")
 
 @app.route('/_logout')
 def logout():
     session.pop('username', None)
     session.pop('user_id', None)
-    
+
     return redirect("/")
 
 
