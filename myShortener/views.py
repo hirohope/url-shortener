@@ -39,12 +39,13 @@ def short():
 				if s == None:
 					s = Shortened(url, short)
 					db_session.add(s)
+					db_session.commit()
 
 					if 'username' in session:
 						myS = MyShortened(s.id, session['user_id'])
 						db_session.add(myS)
+						db_session.commit()
 
-					db_session.commit()
 				else:
 					s = Shortened.query.filter(Shortened.url == url).first()
 					if s == None:
@@ -59,8 +60,9 @@ def short():
 				if s == None:
 					s = Shortened(url)
 					db_session.add(s)
-					myS = MyShortened(s.id, session['user_id'])
+					db_session.commit()
 					db_session.add(myS)
+					myS = MyShortened(s.id, session['user_id'])
 					db_session.commit()
 
 				elif 'username' in session and MyShortened.query.filter(MyShortened.user_id == session['user_id']).filter(MyShortened.short_id == s.id).first() == None:
