@@ -17,12 +17,13 @@ USERNAME = 'admin'
 PASSWORD = 'admin'
 
 #twitter
-consumer_key='EfaEAkiiGtnfwtFcZUNA'
-consumer_secret='GTbJ1qc93KeqFWglPldVGBm8yJ6xLL691uOsrIWj65Y'
+consumer_key='M2eOi6OXTb6vAGkH5IUDWg'
+consumer_secret='MKct3sDdldAaMSpK7WIYdEnLarANH7AElo26Yk07GM'
 request_token_url='https://api.twitter.com/oauth/request_token'
 access_token_url='https://api.twitter.com/oauth/access_token'
 authorize_url='https://api.twitter.com/oauth/authorize'
-callback_url = 'http://wn.cl'
+authenticate_url='https://api.twitter.com/oauth/authenticate'
+callback_url = 'http://test.wn.cl'
 
 
 app = Flask(__name__, static_folder='static', static_url_path='/static')

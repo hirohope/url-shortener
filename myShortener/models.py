@@ -43,3 +43,17 @@ class Log(Base):
 
 	def __repr__(self):
 		return 'Log url %r %r %r' % (self.id, self.date, self.short_id)
+
+class User(Base):
+	__tablename__ = "user"
+	id = Column(Integer, primary_key=True)
+	username = Column(String(256), unique=True)
+	date = Column(DateTime, default=datetime.datetime.now)
+
+	def __init__(self, username):
+		self.username = username
+
+	def __repr__(self):
+		return 'Log url %r %r %r' % (self.id, self.date, self.short_id)
+
+		
