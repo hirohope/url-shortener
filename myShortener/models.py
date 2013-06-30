@@ -45,7 +45,7 @@ class Log(Base):
 		return 'Log url %r %r %r' % (self.id, self.date, self.short_id)
 
 class User(Base):
-	__tablename__ = "user"
+	__tablename__ = "twitter_user"
 	id = Column(Integer, primary_key=True)
 	username = Column(String(256), unique=True)
 	email = Column(String(256), unique=True)
@@ -66,7 +66,7 @@ class User(Base):
 class Profile(Base):
 	__tablename__ = 'profile'
 	id = Column(Integer, primary_key=True)
-	user_id = Column(Integer, ForeignKey('user.id'))
+	user_id = Column(Integer, ForeignKey('twitter_user.id'))
 	oauth_token = Column(String(200)) 
 	oauth_secret = Column(String(200))
 
@@ -91,4 +91,3 @@ class MyShortened(Base):
 		return "MyShortened %r %r" % (self.short_id, self.user_id)
 
 
-		
