@@ -61,8 +61,8 @@ def short():
 					s = Shortened(url)
 					db_session.add(s)
 					db_session.commit()
-					db_session.add(myS)
 					myS = MyShortened(s.id, session['user_id'])
+					db_session.add(myS)
 					db_session.commit()
 
 				elif 'username' in session and MyShortened.query.filter(MyShortened.user_id == session['user_id']).filter(MyShortened.short_id == s.id).first() == None:
