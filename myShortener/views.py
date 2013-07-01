@@ -1,6 +1,6 @@
 from myShortener import app
 from myShortener.database import db_session
-from myShortener.models import Shortened, Log, User, Profile
+from myShortener.models import Shortened, Log, User
 from flask import Flask, request, session, g, redirect, url_for, \
 	abort, render_template, flash
 
