@@ -141,13 +141,15 @@ def callback():
 
 		user = User.query.filter(User.username == access_token['screen_name']).first()
 		if user == None:
-			user = User(access_token['user_id'], access_token['screen_name'], access_token['oauth_token_secret'])
-			profile = Profile(user.id, access_token['oauth_token'],access_token['oauth_token_secret'])
+			user = User(access_token['user_id'], access_token['screen_name'], access_token['oauth_token'], access_token['oauth_token_secret'])
 			db_session.add(user)
 			db_session.commit()
-			db_session.add(profile)
-			db_session.commit()
 
+		user.oauth_token = access_token['oauth_token']
+		user.oauth_token_secret = access_token['oauth_token_secret']
+		db_session.add(user)
+		db_session.commit()		
+		
 		session['username'] = user.username
 		session['user_id'] = user.id
 		return redirect("/")
