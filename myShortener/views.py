@@ -164,8 +164,6 @@ def mylinks():
 	if 'user_id' in session:
 		user = User.query.filter(User.id == session['user_id']).first()
 		shorts = user.shorts
-		print shorts[0].logs
-
 		return render_template("mylinks.html", links=shorts,session=session)
 	
 	else:
