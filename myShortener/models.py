@@ -56,7 +56,6 @@ class User(Base):
 	__tablename__ = 'user'
 	id = Column(Integer, primary_key=True)
 	username = Column(String(256), unique=True)
-	email = Column(String(256), unique=True)
 	oauth_token_secret = Column(String(256))
 
 	date = Column(DateTime, default=datetime.datetime.now)
@@ -64,14 +63,13 @@ class User(Base):
 
 	shorts = relationship('Shortened', secondary=myShorts, lazy='dynamic')
 
-	def __init__(self, user_id, username, email, oauth_token_secret):
+	def __init__(self, user_id, username, oauth_token_secret):
 		self.id = user_id
 		self.username = username
-		self.email = email
 		self.oauth_token_secret = oauth_token_secret
 
 	def __repr__(self):
-		return 'User %r %r %r %r %r' % (self.id, self.username, self.email, self.date, self.active)
+		return 'User %r %r %r %r' % (self.id, self.username, self.date, self.active)
 
 class Profile(Base):
 	__tablename__ = 'profile'

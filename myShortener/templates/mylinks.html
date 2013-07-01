@@ -1,0 +1,34 @@
+{%extends "layout.html"%}
+{% block body %}
+
+<div class="jumbotron">
+	<p class="lead">
+		Your links
+	</p>
+
+	<div class="container">
+		<table class="table">
+			<thead>
+				<th>#</th>
+				<th>URL</th>
+				<th>Shorted URL</th>
+				<th>Custom URL</th>
+				<th>Clicks</th>
+			</thead>	
+			<tbody>
+			{% for link in links %}
+				<tr>
+					<td> {{loop.index}} </td>
+					<td> <a href='http://wn.lc/{{link.short}}'>http://wn.lc/{{link.short}}</a> </td>
+					<td> <a href='{{link.url}}'>{{link.url}}</a></td>
+					<td> {{link.custom}} </td>
+					<td> {{link.logs | length}}</td> <!-- <i class="icon-signal"></i>  -->
+				</tr>
+			{% endfor%}
+			</tbody>
+		</table>
+	</div>
+
+
+</div>
+{% endblock %}

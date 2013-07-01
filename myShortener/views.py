@@ -141,7 +141,7 @@ def callback():
 
 		user = User.query.filter(User.username == access_token['screen_name']).first()
 		if user == None:
-			user = User(access_token['user_id'], access_token['screen_name'], "test@wn.lc", access_token['oauth_token_secret'])
+			user = User(access_token['user_id'], access_token['screen_name'], access_token['oauth_token_secret'])
 			profile = Profile(user.id, access_token['oauth_token'],access_token['oauth_token_secret'])
 			db_session.add(user)
 			db_session.commit()
