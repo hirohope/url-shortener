@@ -1,6 +1,6 @@
 from myShortener import app
 from myShortener.database import db_session
-from myShortener.models import Shortened, Log, User, Profile, MyShortened
+from myShortener.models import Shortened, Log, User, Profile
 from flask import Flask, request, session, g, redirect, url_for, \
 	abort, render_template, flash
 
@@ -147,6 +147,16 @@ def logout():
     session.pop('user_id', None)
 
     return redirect("/")
+
+@app.route('/_mylinks/')
+def mylinks():
+	if 'user_id' in session:
+		user = User.query.filter(User.id == session['user_id']).first()
+		shorts = user.shorts
+		return "<br>".join(map(lambda x: str(x), shorts))
+	
+	else:
+		return redirect("/")
 
 
 

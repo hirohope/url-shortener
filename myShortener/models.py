@@ -1,12 +1,18 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Boolean
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Boolean, Table
 from sqlalchemy.orm import relationship, backref
 from myShortener.database import Base
 
 from random import choice
 import string, datetime
 
+myShorts = Table('myShorts',
+				Base.metadata,
+				Column('short_id', Integer, ForeignKey('shortened.id')),
+				Column('user_id', Integer, ForeignKey('user.id'))
+			)
+
 class Shortened(Base):
-	__tablename__ = "shortened"
+	__tablename__ = 'shortened'
 	id = Column(Integer, primary_key=True)
 	url = Column(String(256))
 	short = Column(String(64), unique=True)
@@ -33,7 +39,7 @@ class Shortened(Base):
 		return ''.join(choice(string.lowercase+string.digits) for i in range(length))
 
 class Log(Base):
-	__tablename__ = "log"
+	__tablename__ = 'log'
 	id = Column(Integer, primary_key=True)
 	date = Column(DateTime, default=datetime.datetime.now)
 	short_id = Column(Integer, ForeignKey('shortened.id'))
@@ -44,8 +50,10 @@ class Log(Base):
 	def __repr__(self):
 		return 'Log url %r %r %r' % (self.id, self.date, self.short_id)
 
+
+
 class User(Base):
-	__tablename__ = "twitter_user"
+	__tablename__ = 'user'
 	id = Column(Integer, primary_key=True)
 	username = Column(String(256), unique=True)
 	email = Column(String(256), unique=True)
@@ -53,6 +61,8 @@ class User(Base):
 
 	date = Column(DateTime, default=datetime.datetime.now)
 	active = Column(Boolean, default=True)
+
+	shorts = relationship('Shortened', secondary=myShorts, lazy='dynamic')
 
 	def __init__(self, user_id, username, email, oauth_token_secret):
 		self.id = user_id
@@ -66,7 +76,7 @@ class User(Base):
 class Profile(Base):
 	__tablename__ = 'profile'
 	id = Column(Integer, primary_key=True)
-	user_id = Column(Integer, ForeignKey('twitter_user.id'))
+	user_id = Column(Integer, ForeignKey('user.id'))
 	oauth_token = Column(String(200)) 
 	oauth_secret = Column(String(200))
 
@@ -77,17 +87,5 @@ class Profile(Base):
 
 	def __repr__(self):
 		return "Profile %r %r %r %r" % (self.id, self.user_id, self.oauth_token, self.oauth_secret)
-
-class MyShortened(Base):
-	__tablename__ = "myShortened"
-	short_id = Column(Integer, ForeignKey('shortened.id'), primary_key=True)
-	user_id = Column(Integer, ForeignKey('user.id'), primary_key=True)
-
-	def __init__(self, short_id, user_id):
-		self.short_id = short_id
-		self.user_id = user_id
-
-	def __repr__(self):
-		return "MyShortened %r %r" % (self.short_id, self.user_id)
 
 
