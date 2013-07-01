@@ -9,10 +9,7 @@ import oauth2 as oauth
 
 @app.route('/')
 def index():
-	username = ''
-	if 'username' in session:
-		username = session['username']
-	return render_template('index.html', url = request.args.get('url', ''), custom = request.args.get('custom', ''), username=username)
+	return render_template('index.html', url = request.args.get('url', ''), custom = request.args.get('custom', ''), session=session)
 
 @app.route('/<short>')
 def unfold(short):
@@ -27,6 +24,8 @@ def unfold(short):
 
 @app.route('/_short', methods=['POST', 'GET'])
 def short():
+	if 'username' in session:
+		username = session['username']
 	error = None
 	url = None
 	short = None
@@ -42,39 +41,50 @@ def short():
 					db_session.commit()
 
 					if 'username' in session:
-						myS = MyShortened(s.id, session['user_id'])
-						db_session.add(myS)
-						db_session.commit()
+						user = User.query.filter(User.id == session['user_id']).first()
+						if s not in user.shorts:
+							user.shorts.append(s)
+							db_session.add(user)
+							db_session.commit()
 
 				else:
 					s = Shortened.query.filter(Shortened.url == url).first()
 					if s == None:
 						flash("Custom URL already taken")
 						return redirect("/?url={}&custom={}".format(url,short))
-					elif 'username' in session and MyShortened.query.filter(MyShortened.user_id == session['user_id']).filter(MyShortened.short_id == s.id).first() == None:
-						myS = MyShortened(s.id, session['user_id'])
-						db_session.add(myS)
-						db_session.commit()
+					elif 'username' in session:
+						user = User.query.filter(User.id == session['user_id']).first()
+						if s not in user.shorts:
+							user.shorts.append(s)
+							db_session.add(user)
+							db_session.commit()
+
 			else:
-				s = Shortened.query.filter(Shortened.url == url).first()
+				s = Shortened.query.filter(Shortened.url == url).filter(Shortened.custom == False).first()
 				if s == None:
 					s = Shortened(url)
 					db_session.add(s)
 					db_session.commit()
-					myS = MyShortened(s.id, session['user_id'])
-					db_session.add(myS)
-					db_session.commit()
 
-				elif 'username' in session and MyShortened.query.filter(MyShortened.user_id == session['user_id']).filter(MyShortened.short_id == s.id).first() == None:
-					myS = MyShortened(s.id, session['user_id'])
-					db_session.add(myS)
-					db_session.commit()
+					if 'username' in session:
+						user = User.query.filter(User.id == session['user_id']).first()
+						if s not in user.shorts:
+							user.shorts.append(s)
+							db_session.add(user)
+							db_session.commit()
+
+				elif 'username' in session:
+					user = User.query.filter(User.id == session['user_id']).first()
+					if s not in user.shorts:
+						user.shorts.append(s)
+						db_session.add(user)
+						db_session.commit()
 
 			short = s.short
 			
 		else:
 			error = "There's no url"
-	return render_template('short.html', error=error, url=url, short=short)
+	return render_template('short.html', error=error, url=url, short=short,session=session)
 
 @app.route('/_links/')
 def links():
@@ -102,7 +112,7 @@ def sign_in():
 
 	return redirect(url_twitter)
   
-@app.route('/_callback/', methods= ['GET'])
+@app.route('/_callback', methods= ['GET'])
 def callback():
 	print request
 	if request.method=='GET':
@@ -134,6 +144,7 @@ def callback():
 			user = User(access_token['user_id'], access_token['screen_name'], "test@wn.lc", access_token['oauth_token_secret'])
 			profile = Profile(user.id, access_token['oauth_token'],access_token['oauth_token_secret'])
 			db_session.add(user)
+			db_session.commit()
 			db_session.add(profile)
 			db_session.commit()
 
@@ -153,7 +164,9 @@ def mylinks():
 	if 'user_id' in session:
 		user = User.query.filter(User.id == session['user_id']).first()
 		shorts = user.shorts
-		return "<br>".join(map(lambda x: str(x), shorts))
+		print shorts[0].logs
+
+		return render_template("mylinks.html", links=shorts,session=session)
 	
 	else:
 		return redirect("/")

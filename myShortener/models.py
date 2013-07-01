@@ -17,7 +17,7 @@ class Shortened(Base):
 	url = Column(String(256))
 	short = Column(String(64), unique=True)
 	custom = Column(Boolean, default=False)
-	logs = relationship('Log', backref='shortened', lazy='dynamic')
+	logs = relationship('Log', backref='shortened')
 
 	def __init__(self, url=None, short=None):
 		self.url = url

@@ -8,7 +8,7 @@
     <meta name="author" content="">
 
     <!-- Le styles -->
-    <link href="static/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
     <style type="text/css">
       body {
         padding-top: 20px;
@@ -101,7 +101,7 @@
     
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
 
-    <script src="static/js/bootstrap.js"></script>
+    <script src="/static/js/bootstrap.js"></script>
     
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -122,8 +122,8 @@
           </li>
           <li><a href="/_about">About</a></li>
           <li><a href="/_contact">Contact</a></li>
-          {% if username %}
-            <li><a href="/_setting">{{username}}</a></li>
+          {% if session.username %}
+            <li><a href="/_mylinks">{{session.username}}</a></li>
             <li><a href="/_logout">Logout</a></li>
           {% else %}
             <li><a href="/_sign_in">Sign In With Twitter</a></li>
