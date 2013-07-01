@@ -170,7 +170,13 @@ def mylinks():
 		return redirect("/")
 
 
+@app.route('/_about/')
+def about():
+	return render_template("about.html")
 
+@app.route('/_contact/')
+def contact():
+	return render_template("contact.html")
 
 
 

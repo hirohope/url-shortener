@@ -79,6 +79,13 @@
         border-right: 0;
         border-radius: 0 3px 3px 0;
       }
+
+      .center {
+        float: none;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
     </style>
     
     <script type="text/javascript">
@@ -117,14 +124,20 @@
 
       <div class="masthead">
         <ul class="nav nav-pills pull-right">
-          <li class="active">
+          <li>
             <a href="/">Home</a>
           </li>
           <li><a href="/_about">About</a></li>
           <li><a href="/_contact">Contact</a></li>
           {% if session.username %}
-            <li><a href="/_mylinks">{{session.username}}</a></li>
-            <li><a href="/_logout">Logout</a></li>
+            <li class="dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown" role="button" id="dropA" href="#">Your Profile: {{session.username}} <b class="caret"></b></a>
+              <ul class="dropdown-menu" role="menu" aria-labelledby="dropA">
+                <li role="presentation"> <a role="menuitem" tableindex="-1" href="/_mylinks">Your Links: {{session.username}}</a></li>
+                <li class="divider"></li>
+                <li role="presentation"> <a role="menuitem" tableindex="-1" href="/_logout">Logout</a></li>
+              </ul>
+            </li>
           {% else %}
             <li><a href="/_sign_in">Sign In With Twitter</a></li>
           {% endif %}
